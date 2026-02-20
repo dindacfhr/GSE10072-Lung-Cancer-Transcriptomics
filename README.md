@@ -16,6 +16,17 @@ Analisis ini bertujuan untuk mengidentifikasi gen yang mengalami perubahan ekspr
 - R Version: 4.5.2
 - Operating System: Windows 11 x64
 - Bioconductor Version: 3.22
-
-
-- 
+# Output Analisis
+1. Daftar DEG signifikan
+2. Visualisasi DEG signifikan
+3. Visualisasi Enrichment GO
+4. Visualisasi Encirhment KEGG (dotplot & barplot)
+5. Diagram pathway NSCLC (hsa05223) dengan pemetaan ekspresi gen (merah = upregulated, biru = downregulated)
+# Interpretasi Biologis Singkat
+Hasil enrichment menunjukkan keterlibatan jalur utama kanker paru seperti:
+- PI3K–Akt signaling pathway
+- MAPK signaling pathway
+- Cell cycle regulation
+- p53 signaling pathway
+- Non-small cell lung cancer (hsa05223)
+Temuan ini konsisten dengan mekanisme molekuler NSCLC yang melibatkan peningkatan proliferasi, gangguan kontrol siklus sel, serta aktivasi jalur survival dan antiapoptosis.
