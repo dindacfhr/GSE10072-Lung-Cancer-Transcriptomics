@@ -171,8 +171,6 @@ topTableResults <- topTable(
 
 head(topTableResults)
 
-
-
 #PART H. ANOTASI NAMA GEN 
 
 #Penting:
@@ -519,3 +517,78 @@ write.csv(
 )
 
 message("Analisis GO & KEGG pathway selesai dan hasil telah disimpan.")
+
+#---------------------------------------------------------
+# M. Analisis KEGG Signaling Pathways
+#---------------------------------------------------------
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install(c("clusterProfiler",
+                       "org.Hs.eg.db",
+                       "enrichplot",
+                       "pathview"), ask = FALSE)
+
+library(clusterProfiler)
+library(org.Hs.eg.db)
+library(enrichplot)
+library(pathview)
+library(dplyr)
+
+#Load Data
+setwd("C:/Users/Dinda Cinta Fahira/Documents")
+deg <- read.csv("Hasil_GSE10072_DEG.csv")
+
+colnames(deg)
+nrow(deg)
+
+#Filter DEG Signifikan
+deg_sig <- deg %>%
+  filter(adj.P.Val < 0.05 & abs(logFC) > 1)
+
+nrow(deg_sig)
+
+#kalau masih 0, longgarkan : 
+deg_sig <- deg %>%
+  filter(adj.P.Val < 0.05)
+
+#Konversi symbol -> ENTREZID (CARA STABIL)
+gene_df <- AnnotationDbi::select(org.Hs.eg.db,
+                                 keys = deg_sig$SYMBOL,
+                                 columns = "ENTREZID",
+                                 keytype = "SYMBOL")
+#Buang NA
+gene_df <- na.omit(gene_df)
+
+#Gabungkan kembali dengan logFC
+deg_sig <- merge(deg_sig, gene_df, by = "SYMBOL")
+
+nrow(deg_sig)
+
+#Gene Vector untuk Pathview
+gene_vector <- deg_sig$logFC
+names(gene_vector) <- deg_sig$ENTREZID
+
+#KEEG Enrichment
+kegg_enrich <- enrichKEGG(gene         = deg_sig$ENTREZID,
+                          organism     = "hsa",
+                          pvalueCutoff = 0.05)
+
+head(kegg_enrich)
+
+#Visualisasi KEGG
+dotplot(kegg_enrich, showCategory = 15)
+barplot(kegg_enrich, showCategory = 15)
+
+
+#Mapping NSCLC Pathway 
+pathview(gene.data  = gene_vector,
+         pathway.id = "05223",
+         species    = "hsa",
+         out.suffix = "NSCLC_fixed",
+         kegg.native = TRUE,
+         low = "blue",
+         mid = "gray",
+         high = "red")
+
