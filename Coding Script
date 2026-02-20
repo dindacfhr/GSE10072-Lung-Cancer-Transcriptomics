@@ -2,7 +2,7 @@
 #Dataset: GSE10072 (Lung Adenocarcinoma vs Normal)
 #Platform: Microarray (Affymetrix GPL96)
 #Tujuan: Mengidentifikasi Differentially Expressed Genes (DEG) 
-
+  
 #PART A. PENGANTAR KONSEP 
 
 #Analisis ekspresi gen bertujuan untuk membandingkan tingkat ekspresi gen 
@@ -364,7 +364,6 @@ pheatmap(
   clustering_method = "complete",
   main = "Top 50 Differentially Expressed Genes"
 )
-
 
 #PART K. MENYIMPAN HASIL 
 
